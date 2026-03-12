@@ -8,7 +8,7 @@ from django.db.models import Max
 from rest_framework import generics, filters
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.views import APIView
-from productmanagement.filters import ProductFilter
+from productmanagement.filters import ProductFilter, InStockFilterBackend
 from django_filters.rest_framework import DjangoFilterBackend
 
 
@@ -18,9 +18,10 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
     filterset_class = ProductFilter
     filter_backends = [DjangoFilterBackend,
                         filters.SearchFilter,
-                        filters.OrderingFilter]
+                        filters.OrderingFilter,
+                        InStockFilterBackend]
     
-    search_fields = ['name', 'description']
+    search_fields = ['=name', 'description']
     ordering_fields= ['name', 'price', 'stock']
 
 
