@@ -10,10 +10,11 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.views import APIView
 from productmanagement.filters import ProductFilter, InStockFilterBackend
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.pagination import PageNumberPagination
 
 
 class ProductListCreateAPIView(generics.ListCreateAPIView):
-    queryset = Product.objects.all()
+    queryset = Product.objects.order_by('pk')
     serializer_class = ProductSerializer
     filterset_class = ProductFilter
     filter_backends = [DjangoFilterBackend,
@@ -23,7 +24,11 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
     
     search_fields = ['=name', 'description']
     ordering_fields= ['name', 'price', 'stock']
-
+    pagination_class=PageNumberPagination
+    pagination_class.page_size=2
+    pagination_class.page_query_param='pagenum'
+    pagination_class.page_size_query_param='size'
+    pagination_class.max_page_size=6
 
     def get_permissions(self):
         self.permission_classes = [AllowAny]
