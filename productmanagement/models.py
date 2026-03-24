@@ -31,6 +31,7 @@ class Order(models.Model):
         SHIPPED="shipped"
         DELIVERED="delivered"
         CANCELLED="cancelled"
+        CONFIRMED='confirmed'
     order_id= models.UUIDField(primary_key= True, default=uuid.uuid4)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     status= models.CharField(

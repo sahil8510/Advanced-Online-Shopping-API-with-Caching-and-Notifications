@@ -59,6 +59,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         ]
 
 class OrderSerializer(serializers.ModelSerializer):
+    order_id=serializers.UUIDField(read_only=True)
     total_price=serializers.SerializerMethodField()
     items=OrderItemSerializer(many=True, read_only=True) 
     class Meta:
