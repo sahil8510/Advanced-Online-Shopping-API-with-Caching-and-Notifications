@@ -3,12 +3,12 @@ from django.shortcuts import get_object_or_404
 from productmanagement.models import Product, Category, Order,OrderItem, User
 from productmanagement.serializers import ProductSerializer,CategorySerializer, OrderItemSerializer, OrderSerializer, ProductInfoSerializer, UserSerializer, CreateUserSerializer
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, action
 from django.db.models import Max
 from rest_framework import generics, filters, viewsets
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.views import APIView
-from productmanagement.filters import ProductFilter, InStockFilterBackend
+from productmanagement.filters import ProductFilter, InStockFilterBackend, OrderFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
 
@@ -74,8 +74,18 @@ class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 class OrderViewSet(viewsets.ModelViewSet):
     queryset=Order.objects.prefetch_related('items__product').all()
     serializer_class=OrderSerializer
-    permission_classes=[AllowAny]
+    permission_classes=[IsAuthenticated]
     pagination_class=None
+    filterset_class=OrderFilter 
+    filter_backends=[DjangoFilterBackend]   
+
+    @action(detail=False,
+             methods=['get'],
+             url_path='user-orders')
+    def user_orders(self, request):
+        orders=self.get_queryset().filter(user=request.user)
+        serializer=self.get_serializer(orders, many=True)
+        return Response(serializer.data)
     
 
 
