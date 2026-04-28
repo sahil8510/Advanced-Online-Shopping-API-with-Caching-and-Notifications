@@ -4,7 +4,7 @@ GET http://localhost:8000/products/ HTTP/1.1
 
 POST http://localhost:8000/products/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY3OTUwMTg0LCJpYXQiOjE3Njc5NDk4ODUsImp0aSI6ImE2MGM2ZmZhN2I4MzQxNTRiMGQ1NTlhNmNjMTE5YTkyIiwidXNlcl9pZCI6IjEifQ.ThMIi8JvSdaCKQajieoATcBAdIm41f84Dpw295jt5JQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2MTQxMDQ5LCJpYXQiOjE3NzYxNDA3NDksImp0aSI6ImRlZDgzZGRhYzVlNDRjNzE4OTE5NjhmNGQ5MDk2MDNkIiwidXNlcl9pZCI6IjEwIn0.UtRuGnpMjw3dzUzwfDVSf4sHkVpIgdL2yoyc4mt2EoU
 
 {
     "name": "jhumkat",
@@ -33,7 +33,7 @@ Content-Type: application/json
 
 POST http://localhost:8000/products/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY3OTUwMTg0LCJpYXQiOjE3Njc5NDk4ODUsImp0aSI6ImE2MGM2ZmZhN2I4MzQxNTRiMGQ1NTlhNmNjMTE5YTkyIiwidXNlcl9pZCI6IjEifQ.ThMIi8JvSdaCKQajieoATcBAdIm41f84Dpw295jt5JQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc0ODQ1Njc1LCJpYXQiOjE3NzQ4NDUzNzUsImp0aSI6IjQ3YThlN2Q0ZGMwMjQ2ZDc4ODgzZjRiNDYwOGQwYmRjIiwidXNlcl9pZCI6IjEifQ.OIJxgUmAYfLfgYycUGNZJLL1blyPnoKmQbZmcwaPqBA"
 
 {
 	"name": "Television",
@@ -52,11 +52,65 @@ Content-Type: application/json
     "password":"password123456"
 }
 
-### 
+###
 POST http://localhost:8000/api/token/ HTTP/1.1
 Content-Type: application/json
 
 {
-	"username": "admin",
-	"password": "password123456"
+	"username": "sahilhgjk",
+	"password": "sahil@dev"
+}
+
+###
+GET http://localhost:8000/orders/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc3MTkzMjI2LCJpYXQiOjE3NzcxOTI5MjYsImp0aSI6IjU5NDVmMDFkNTg0MjRkNzc5OWMxZmUxZWFkMmI5ZGQyIiwidXNlcl9pZCI6IjEwIn0.5Hm34pkIsCxb-ZSD_WnPL9T9gMj4eSK9jSxiCih-ZRQ
+
+###
+POST http://localhost:8000/products/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2NTg2MjI1LCJpYXQiOjE3NzY1ODU5MjUsImp0aSI6IjVlNzY4ZDc1MDgyZjQ3YjM4ODczYzI1NzA5NGE5YTUxIiwidXNlcl9pZCI6IjEwIn0.Qnn0BiIrIzNhjvrZQbtPxJS565RLgaRRxTv0xhRPkV0
+{
+	"name": "Television",
+	"price": 300.00,
+	"stock": 14,
+	"description": "An amazing new TV"    
+}
+
+###
+POST http://localhost:8000/orders/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2OTE5MTg2LCJpYXQiOjE3NzY5MTg4ODcsImp0aSI6ImEwZWQ3N2NkNWM5ZDQwYzY4NmRhNjJhZWE3ZDQ4OTZjIiwidXNlcl9pZCI6IjEwIn0.mWLadKMoAmSBRg3IxnsHGukMXVpahYUdjEYx5k9dRiU
+
+{
+    "status":"pending",
+    "items": [
+        {
+            "product":2,
+            "quantity":2
+        },
+        {
+            "product":3,
+            "quantity":1
+        }
+    ]
+
+}
+
+###
+PUT http://localhost:8000/orders/05a163ab-f900-4966-ab26-6f4ac955cc88/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc3Mzc0OTM0LCJpYXQiOjE3NzczNzQ2MzUsImp0aSI6IjEwOTFlZTAxMTM4NDQ3M2FhYmFmZWM3YjU4ODU2ZmZhIiwidXNlcl9pZCI6IjEifQ.mueXXA1AzVLqHs3QVvz22LsGh2-aqZfQlLiTYvrj4TY
+{
+    "status":"pending",
+    "items": [
+        {
+            "product":2,
+            "quantity":6
+        },
+        {
+            "product":3,
+            "quantity":19
+        }
+    ]
+
 }

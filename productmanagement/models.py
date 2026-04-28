@@ -6,6 +6,8 @@ import uuid
 class User(AbstractUser):
     phone_no = models.CharField(max_length = 20, blank= True)
     address= models.CharField(max_length= 100, blank=True)
+
+    
     
 class Category(models.Model):
     name = models.CharField(max_length=200)

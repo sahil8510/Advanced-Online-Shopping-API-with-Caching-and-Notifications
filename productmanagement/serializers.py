@@ -58,10 +58,64 @@ class OrderItemSerializer(serializers.ModelSerializer):
             'product_price'
         ]
 
+class OrderCreateSerializer(serializers.ModelSerializer):
+    class OrderItemCreateSerializer(serializers.ModelSerializer):
+        class Meta:
+            model=OrderItem
+            fields=('product','quantity')
+    order_id=serializers.UUIDField(read_only=True)
+    items=OrderItemCreateSerializer(many=True, required=False)
+
+    def update(self, instance, validated_data):
+        print(instance.items.all())
+        print(validated_data)
+        orderitem_data= validated_data.pop('items')
+        print(orderitem_data)
+        instance= super().update(instance, validated_data)
+
+        if orderitem_data is not None:
+            instance.items.all().delete()
+
+            for item in orderitem_data:
+                OrderItem.objects.create(order=instance, **item)
+
+        return instance
+
+    def create(self, validated_data):
+        orderitem_data=validated_data.pop('items')
+        order=Order.objects.create(**validated_data)
+
+        for item in orderitem_data:
+            OrderItem.objects.create(order=order, **item)
+
+        return order
+
+
+    class Meta:
+        model= Order
+        fields=(
+            'order_id',
+            'user',
+            'status',
+            'items',
+        )
+
+        extra_kwargs={
+            'user':{'read_only':True}
+        }
+
+
+
 class OrderSerializer(serializers.ModelSerializer):
     order_id=serializers.UUIDField(read_only=True)
     total_price=serializers.SerializerMethodField()
     items=OrderItemSerializer(many=True, read_only=True) 
+   
+    def get_total_price(self, obj):
+        order_items=obj.items.all()
+        totalprice=sum(order_item.item_subtotal for order_item in order_items)
+        return totalprice
+    
     class Meta:
         model= Order
         fields=[
@@ -72,37 +126,14 @@ class OrderSerializer(serializers.ModelSerializer):
             'items',
             'total_price'
         ]
-    def get_total_price(self, obj):
-        order_items=obj.items.all()
-        totalprice=sum(order_item.item_subtotal for order_item in order_items)
-        return totalprice
 
 class ProductInfoSerializer(serializers.Serializer):
     products= ProductSerializer(many=True)
     count= serializers.IntegerField()
     max_price=serializers.FloatField()
     
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model=User
-        fields= [
-            'username',
-            'first_name',
-            'last_name',
-            'email',
-            'password'
-        ]
-    def get_password(self, obj):
-        pas=obj
-
-
-class CreateUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=User
-        fields= [
-            'username',
-            'first_name',
-            'last_name',
-            'email',
-            'password'
-        ]
+        model = User
+        fields = ('password', 'user_permissions', 'is_authenticated', 'get_full_name', 'orders')

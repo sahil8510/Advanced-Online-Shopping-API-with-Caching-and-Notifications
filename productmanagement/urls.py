@@ -10,9 +10,8 @@ urlpatterns=[
     path('categorylist/', views.CategoryListCreateAPIView.as_view()),
     # path('orders/', views.OrderListAPIView.as_view()),     
     # path('user-orders/', views.UserOrderListAPIView.as_view()),
-    path('users/', views.UserListAPIView.as_view()),     
-    path('signup/', views.CreateUserAPIView.as_view())      
-]
+    path('users/', views.UserListAPIView.as_view())
+    ]
 
 router = DefaultRouter()
 router.register('orders', views.OrderViewSet)

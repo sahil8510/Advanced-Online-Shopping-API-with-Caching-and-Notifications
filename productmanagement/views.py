@@ -1,8 +1,10 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from productmanagement.models import Product, Category, Order,OrderItem, User
-from productmanagement.serializers import ProductSerializer,CategorySerializer, OrderItemSerializer, OrderSerializer, ProductInfoSerializer, UserSerializer, CreateUserSerializer
-from rest_framework.response import Response
+from productmanagement.serializers import (ProductSerializer,CategorySerializer, OrderItemSerializer, 
+                                           OrderSerializer, ProductInfoSerializer, UserSerializer, 
+                                           OrderCreateSerializer)
+from rest_framework.response import Response    
 from rest_framework.decorators import api_view, action
 from django.db.models import Max
 from rest_framework import generics, filters, viewsets
@@ -56,9 +58,9 @@ class UserListAPIView(generics.ListAPIView):
     queryset=User.objects.all()
     serializer_class=UserSerializer
 
-class CreateUserAPIView(generics.CreateAPIView):
-    queryset=User.objects.all()
-    serializer_class=CreateUserSerializer
+# class CreateUserAPIView(generics.CreateAPIView):
+#     queryset=User.objects.all()
+#     serializer_class=CreateUserSerializer
 
 class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset=Product.objects.all()
@@ -77,15 +79,31 @@ class OrderViewSet(viewsets.ModelViewSet):
     permission_classes=[IsAuthenticated]
     pagination_class=None
     filterset_class=OrderFilter 
-    filter_backends=[DjangoFilterBackend]   
+    filter_backends=[DjangoFilterBackend]  
 
-    @action(detail=False,
-             methods=['get'],
-             url_path='user-orders')
-    def user_orders(self, request):
-        orders=self.get_queryset().filter(user=request.user)
-        serializer=self.get_serializer(orders, many=True)
-        return Response(serializer.data)
+    def perform_create(self, serializer):
+        return serializer.save(user=self.request.user) 
+
+    def get_serializer_class(self):
+        # can also check if self.request.method=='POST'
+        if self.action == 'create' or self.action =='update':
+            return OrderCreateSerializer
+        return super().get_serializer_class()
+
+    def get_queryset(self):
+        qs=super().get_queryset()
+        # print(self.request.user.id)
+        if not self.request.user.is_staff:
+            qs=qs.filter(user=self.request.user)
+        return qs
+
+    # @action(detail=False,
+    #          methods=['get'],
+    #          url_path='user-orders')
+    # def user_orders(self, request):
+    #     orders=self.get_queryset().filter(user=request.user)
+    #     serializer=self.get_serializer(orders, many=True)
+    #     return Response(serializer.data)
     
 
 

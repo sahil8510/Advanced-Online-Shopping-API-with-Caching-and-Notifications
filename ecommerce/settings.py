@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'productmanagement.apps.ProductmanagementConfig',
     'rest_framework',
     'silk',
+    'rest_framework_simplejwt',
     'drf_spectacular',
     'django_filters',
     'rest_framework.authtoken',
@@ -143,6 +144,7 @@ AUTH_USER_MODEL= 'productmanagement.User'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication'        
     ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
@@ -152,9 +154,9 @@ REST_FRAMEWORK = {
 
 }
 
-SIMPLE_JWT = {
-   'AUTH_HEADER_TYPES': ('JWT',),
-}
+# SIMPLE_JWT = {
+#    'AUTH_HEADER_TYPES': ('JWT',),
+# }
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'E-COMMERCE',
@@ -167,6 +169,8 @@ SPECTACULAR_SETTINGS = {
 DJOSER={
     'SERIALIZERS':{
         'user_create':'productmanagement.serializers.UserCreateSerializer'
-    }
+    },
+    'TOKEN_MODEL': None,
+
 
 }
